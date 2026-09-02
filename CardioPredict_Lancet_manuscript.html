@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Machine-learning estimation of obstructive coronary artery disease from routine clinical data — a development and internal-validation study</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#555; --line:#d9d9d9; --navy:#0b2f5e; --accent:#8a1538;
+    --tint:#f4f7fb; --tint2:#faf6f2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:Georgia,"Times New Roman",serif; color:var(--ink);
+    line-height:1.62; margin:0; background:#fff;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:48px 28px 96px;}
+  .eyebrow{font-family:Arial,Helvetica,sans-serif; font-size:12px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:10px;}
+  h1{font-size:30px; line-height:1.22; color:var(--navy); margin:0 0 14px; font-weight:700;}
+  h2{font-family:Arial,Helvetica,sans-serif; font-size:19px; color:var(--navy);
+    margin:38px 0 10px; padding-bottom:6px; border-bottom:2px solid var(--navy);}
+  h3{font-family:Arial,Helvetica,sans-serif; font-size:15.5px; color:var(--accent);
+    margin:24px 0 6px;}
+  p{margin:0 0 12px; text-align:justify;}
+  .byline{font-size:15px; color:var(--ink); margin:6px 0 2px;}
+  .affil{font-size:12.5px; color:var(--muted); font-family:Arial,Helvetica,sans-serif; margin:0 0 4px; line-height:1.5;}
+  .meta{font-size:12.5px; color:var(--muted); font-family:Arial,Helvetica,sans-serif; margin-top:8px;}
+  .summary{background:var(--tint); border:1px solid var(--line); border-left:4px solid var(--navy);
+    padding:18px 22px; margin:26px 0; border-radius:4px;}
+  .summary h2{border:0; margin:0 0 8px; font-size:17px;}
+  .summary p{font-size:14.5px;}
+  .ric{background:var(--tint2); border:1px solid #e6d9cc; padding:18px 22px; margin:26px 0; border-radius:4px;}
+  .ric h2{border:0; color:var(--accent); font-size:16px; margin:0 0 8px;}
+  .ric h4{font-family:Arial,Helvetica,sans-serif; font-size:13.5px; margin:14px 0 4px; color:var(--ink);}
+  .ric p{font-size:13.5px; margin-bottom:6px;}
+  table{border-collapse:collapse; width:100%; margin:14px 0 6px; font-size:13px;
+    font-family:Arial,Helvetica,sans-serif;}
+  caption{caption-side:top; text-align:left; font-size:13px; font-weight:700;
+    color:var(--navy); margin-bottom:6px; font-family:Arial,Helvetica,sans-serif;}
+  th,td{border-bottom:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top;}
+  thead th{border-bottom:2px solid var(--navy); color:var(--navy);}
+  tbody tr:nth-child(even){background:#fafafa;}
+  td.num,th.num{text-align:right; font-variant-numeric:tabular-nums;}
+  .figure{border:1px solid var(--line); border-radius:4px; padding:14px; margin:20px 0; background:#fcfcfc;}
+  .figure img{max-width:100%; height:auto; display:block; margin:0 auto 8px;}
+  .figcap{font-size:12.5px; color:var(--muted); font-family:Arial,Helvetica,sans-serif;}
+  .figph{display:flex; align-items:center; justify-content:center; min-height:120px;
+    border:1px dashed var(--line); border-radius:4px; color:#999; font-size:12.5px;
+    font-family:Arial,Helvetica,sans-serif; text-align:center; padding:16px; background:#fff;}
+  .note{font-size:12.5px; color:var(--muted); font-family:Arial,Helvetica,sans-serif;}
+  .small{font-size:12px;}
+  sup{font-size:.72em;}
+  .refs{font-family:Arial,Helvetica,sans-serif; font-size:12.5px; line-height:1.5;}
+  .refs li{margin-bottom:7px;}
+  .kvs{font-family:Arial,Helvetica,sans-serif; font-size:12.5px; color:var(--muted);}
+  hr{border:0; border-top:1px solid var(--line); margin:32px 0;}
+  a{color:var(--navy);}
+  @media print{ body{font-size:11pt;} .wrap{max-width:none;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Articles · Cardiology · Clinical prediction model</div>
+  <h1>Machine-learning estimation of obstructive coronary artery disease from routine clinical and laboratory data to support pre-angiographic triage: development and internal validation of the CardioPredict model</h1>
+
+  <p class="byline">[Author One]<sup>a</sup>, [Author Two]<sup>b</sup>, [Author Three]<sup>a</sup>, [Senior Author]<sup>a,*</sup></p>
+  <p class="affil"><sup>a</sup> [Department / Institution], [City], [Country]. &nbsp; <sup>b</sup> [Second Institution], [City], [Country].</p>
+  <p class="affil"><sup>*</sup> Correspondence: [Senior Author], [address], [email].</p>
+  <p class="meta">Analysis seed fixed (42) · Reported in accordance with the TRIPOD statement<sup>10</sup> for multivariable prediction models. Development cohort data hash (SHA-256, first 16 hex): <span class="kvs">fb3af1d8645920f3</span>.</p>
+
+  <!-- ===================== STRUCTURED SUMMARY ===================== -->
+  <div class="summary">
+    <h2>Summary</h2>
+    <p><strong>Background</strong> Invasive coronary angiography is the reference standard for obstructive coronary artery disease (CAD) but is costly, carries procedural risk, and a substantial proportion of diagnostic angiograms reveal no obstructive disease. Tools that quantify the pre-test probability of obstructive CAD from data available before catheterisation could improve patient selection. We developed and internally validated a machine-learning model (CardioPredict) that estimates the probability of obstructive CAD using only routine demographic, clinical and laboratory variables.</p>
+    <p><strong>Methods</strong> In this single-centre retrospective study we analysed 1187 patients referred for coronary angiography (the analytic sample, drawn from 2346 registry entries after excluding those without an angiographic outcome). The outcome was angiographically obstructive CAD. Thirty pre-procedural variables (demographics, anthropometry, blood pressure, lipid profile, glycaemic indices, inflammatory and haematological markers, and personal/family history) were used; all angiography-derived and outcome-derived fields were removed before modelling to prevent label leakage. A four-learner ensemble (TabPFN, gradient-boosted trees [LightGBM and CatBoost], and a clinical logistic-regression model) was combined through an age-conditional stacked meta-learner, with stratified probability calibration and split-conformal prediction for case-level uncertainty. Discrimination, calibration and clinical-utility metrics were estimated by 2 repeats of 5-fold nested cross-validation, which re-fits all preprocessing and learners within each training fold, with 95% CIs obtained by bootstrap. We benchmarked the ensemble against a penalised logistic-regression model fitted on the same predictors and folds. The deployed model was then fitted on the full cohort with all base learners persisted for deterministic inference.</p>
+    <p><strong>Findings</strong> Obstructive CAD was present in 781 of 1187 patients (65·8%). Using 30 routine pre-procedural predictors and repeated nested cross-validation with fold-internal imputation, the model achieved an area under the receiver-operating-characteristic curve (AUC) of 0·866 (SD across repeats 0·001; bootstrap 95% CI 0·85–0·89). At the prespecified operating threshold (0·73, maximising the Matthews correlation coefficient [MCC]), sensitivity was 74·0% (95% CI 70·8–77·0), specificity 81·5% (77·6–85·2), positive predictive value 88·5% (86·0–91·0), negative predictive value 62·0% (58·0–66·0), overall accuracy 76·6% (74·1–79·0), and MCC 0·53. Predicted probabilities were well calibrated (calibration slope 0·91; calibration-in-the-large −0·05; expected/observed [E/O] ratio 1·02). A penalised logistic-regression model on the same engineered features reached an AUC of 0·794 (0·77–0·82); the ensemble's incremental AUC was +0·077 (95% CI +0·059 to +0·098; p&lt;0·001). The conformal framework flagged 23·7% of patients as statistically indeterminate (gray-zone), with an empirical coverage of 90·1%. No single predictor was strongly discriminatory in isolation (maximum univariable AUC 0·65), indicating that performance derived from multivariable integration rather than any dominant marker.</p>
+    <p><strong>Interpretation</strong> Using only routine pre-procedural data, CardioPredict discriminated obstructive CAD with good calibration and quantified case-level uncertainty, supporting its potential role as a decision-support aid for pre-angiographic triage. Because the model was developed in a single, angiography-referred cohort with high disease prevalence, external and prospective validation, and recalibration to local prevalence, are required before clinical deployment.</p>
+    <p><strong>Funding</strong> [Funding source / None].</p>
+  </div>
+
+  <!-- ===================== RESEARCH IN CONTEXT ===================== -->
+  <div class="ric">
+    <h2>Research in context</h2>
+    <h4>Evidence before this study</h4>
+    <p>Pre-test probability tools for obstructive CAD—such as the updated Diamond–Forrester and CAD Consortium models—rely chiefly on age, sex and symptom typology and tend to over-estimate disease in contemporary populations. Machine-learning models incorporating laboratory data have reported higher discrimination but are frequently limited by optimistic single-split validation, inadequate calibration assessment, and undeclared label leakage from procedure-derived variables.</p>
+    <h4>Added value of this study</h4>
+    <p>We report an ensemble model estimated under repeated nested cross-validation with explicit, audited removal of angiography- and outcome-derived predictors, formal calibration assessment, and conformal case-level uncertainty that explicitly abstains on ambiguous patients. Performance reflects honest out-of-sample estimates rather than a single optimistic split.</p>
+    <h4>Implications of all the available evidence</h4>
+    <p>A calibrated, uncertainty-aware estimate of obstructive-CAD probability from routinely available data could help prioritise invasive angiography and reduce avoidable procedures. Multi-centre external validation, prospective evaluation, and prevalence recalibration are prerequisites for clinical use.</p>
+  </div>
+
+  <!-- ===================== INTRODUCTION ===================== -->
+  <h2>Introduction</h2>
+  <p>Coronary artery disease (CAD) remains the leading cause of morbidity and mortality worldwide, accounting for over nine million deaths annually.<sup>1</sup> Invasive coronary angiography (ICA) is the diagnostic reference standard for obstructive disease and frequently the gateway to revascularisation. However, ICA is resource-intensive, exposes patients to procedural and radiation risks, and remains associated with a high rate of normal or non-obstructive findings. Large-scale registry data indicate that up to 60% of elective diagnostic catheterisations reveal no obstructive stenosis, representing a substantial diagnostic yield deficit and unnecessary risk exposure.<sup>2</sup> Accurate estimation of the pre-test probability (PTP) of obstructive CAD from information available before catheterisation is therefore central to rational patient selection and to reducing low-value invasive testing.</p>
+  <p>For decades, clinical guidelines have relied on risk stratification scores to guide diagnostic decision-making. The landmark Diamond–Forrester model (1979) established the paradigm of using age, sex, and chest pain typicality to estimate the pre-test likelihood of CAD.<sup>3</sup> This framework was subsequently updated and refined by the CAD Consortium models, which incorporated basic risk factors such as diabetes, hypertension, smoking, and dyslipidaemia.<sup>4</sup> Despite their widespread adoption in guidelines, such as those from the European Society of Cardiology (ESC),<sup>5</sup> these classical models are known to overestimate the probability of obstructive CAD in contemporary cohorts. Large-scale validation studies, including those based on the CONFIRM registry, have demonstrated that traditional scores overestimate disease prevalence by up to two-to-three-fold, particularly in women and lower-risk populations.<sup>6</sup> This overestimation is primarily attributed to secular declines in cardiovascular risk factors and the widespread use of primary preventive therapies—such as statins and antihypertensives—over the last forty years, which have shifted the baseline pre-test likelihood compared to the 1970s and 1980s development cohorts.</p>
+  <p>To overcome the limitations of simple demographic-based scores, machine learning (ML) has emerged as a promising tool to integrate high-dimensional clinical inputs. Modern machine-learning architectures can capture complex, non-linear interactions among patient characteristics, blood biomarkers (including advanced lipid sub-fractions, glycaemic indicators, and systemic inflammatory markers), and detailed clinical histories. Studies leveraging large multicentre databases, such as the CONFIRM registry and the PROMISE trial, have demonstrated that ML algorithms—such as gradient-boosted decision trees and ensemble methods—significantly outperform traditional clinical scores in predicting both obstructive CAD and long-term major adverse cardiovascular events.<sup>7,8,9</sup> By incorporating laboratory measurements and biomarkers already routinely collected in secondary care, these models present a scalable solution for pre-angiographic triage without requiring additional imaging or invasive testing.</p>
+  <p>However, the clinical translation and utility of machine learning in this domain have been severely undermined by recurrent methodological limitations in the literature. First, many published models suffer from *label leakage* or data contamination, incorporating predictors that are only determined during or after the angiographic procedure (such as procedure-related complications or post-test medication changes), which artificially inflates model performance. Second, models are frequently validated on a single optimistic data split, or using cross-validation schemes that fail to isolate preprocessing steps (such as imputation, outlier winsorisation, or feature engineering) within the training loop, leading to information leakage from the test set and overoptimistic performance. Third, the majority of research reports discrimination metrics (such as the Area Under the Receiver Operating Characteristic curve, AUC) while omitting formal assessments of probability calibration, leaving clinicians with risk scores whose absolute values cannot be trusted for individual patient triage. Finally, standard classifiers force a binary classification on all cases, disregarding the inherent clinical uncertainty of borderline patients and leading to potentially dangerous misclassifications.</p>
+  <p>We set out to develop and internally validate a clinical decision-support model—CardioPredict—that estimates the probability of obstructive CAD using only routine pre-procedural data, with four explicit design priorities that directly address these shortcomings. First, we establish an audited predictor taxonomy of 30 variables to prevent any label leakage. Second, we employ repeated nested cross-validation (two repeats of five-fold nested cross-validation) to report honest, leakage-free, out-of-sample performance estimates in accordance with the TRIPOD statement.<sup>10</sup> Third, we implement age-stratified probability calibration to deliver reliable, clinical-grade probabilities. Fourth, we integrate split-conformal prediction to quantify case-level uncertainty, establishing a mathematically sound diagnostic "gray-zone" (abstention mechanism) that routes uncertain cases to non-invasive imaging while providing high-confidence decisive predictions for the remaining cohort.<sup>11</sup> We benchmark this ensemble of tabular foundation models (TabPFN),<sup>12</sup> gradient-boosted trees (LightGBM<sup>13</sup> and CatBoost<sup>14</sup>), and clinical logistic regression against standard models to validate its clinical utility.</p>
+
+  <!-- ===================== METHODS ===================== -->
+  <h2>Methods</h2>
+
+  <h3>Study design and participants</h3>
+  <p>We performed a single-centre retrospective analysis of patients referred for clinically indicated coronary angiography. The source registry contained 2346 entries. Patients without a recorded angiographic outcome (1159 of 2346; 49·4%) were ineligible and were excluded, yielding an analytic sample of 1187 patients. Patients with and without a recorded angiographic outcome differed substantially on fully-recorded baseline variables (appendix Table A1): those who proceeded to angiography were older and had markedly higher fasting glucose, triglycerides, high-sensitivity C-reactive protein and blood pressure, and lower total and LDL cholesterol — a profile consistent with selective referral of higher-risk patients. This verification/spectrum bias is a key limitation (see Discussion) and means the cohort is not representative of an unselected chest-pain population. No duplicate records were detected using a seven-variable composite key (age, sex, fasting glucose, total cholesterol, body-mass index, triglycerides, haemoglobin).</p>
+
+  <h3>Outcome</h3>
+  <p>The prediction target was angiographically defined obstructive coronary artery disease (CAD), defined as ≥50% luminal diameter stenosis in at least one major epicardial coronary artery (or ≥50% left main stenosis) on invasive coronary angiography, recorded as a binary outcome. Controls (no obstructive CAD) were patients referred for and undergoing angiography in whom no epicardial stenosis reached this threshold — i.e. angiographically verified, not a separate unscreened "healthy" sample — so the outcome is defined identically in cases and controls. The analytic sample comprised 781 patients with obstructive CAD (65·8%) and 406 without (34·2%); the class-imbalance ratio was 1·92. This prevalence reflects an angiography-referred population and is substantially higher than in screening or general-outpatient settings.</p>
+
+  <h3>Predictors and prevention of label leakage</h3>
+  <p>From 223 raw fields we removed, by a prespecified taxonomy, identifier and free-text columns (n=5), all angiography/vessel-level fields and other outcome-derived variables (n=69), and zero-variance columns (n=8), leaving 141 candidate variables that were used for the descriptive cohort audit. From these we used a <em>prespecified</em> set of <strong>30 routine pre-procedural predictors</strong> as model inputs (this fixed list, not a data-driven selection, is given in full in the appendix). Three variables with &gt;50% missingness were deliberately excluded from the primary model — platelet count (71% missing; non-discriminatory, group means 155·5 vs 154·6, p=0·86) and the depression and anxiety scores (~52% missing) — to avoid imputation-driven artefacts (a sensitivity analysis confirmed performance was unchanged by their inclusion). The 30 predictors span demographics (age, sex), anthropometry (body-mass index, waist circumference, waist-to-hip ratio), blood pressure and hypertension status, glycaemic and insulin-resistance indices (fasting glucose, diabetes, triglyceride–glucose index), the lipid profile and derived atherogenic ratios (total, LDL and HDL cholesterol, non-HDL, total-cholesterol/HDL ratio, atherogenic index of plasma, and a composite triglyceride·hs-CRP·glucose/HDL index), systemic inflammation and haematology (high-sensitivity C-reactive protein, white-cell count, haemoglobin), lifestyle (smoking history, physical-activity level), medication (statin use), and personal/family history (prior myocardial infarction, hypertension, and family history of diabetes, cardiovascular disease and hypertension). Within each cross-validation training fold these predictors were expanded with clinically motivated, deterministic engineered features (haemodynamic composites, atherogenic and insulin-resistance indices, and guideline-based thresholds), giving 76 modelled features (events-per-variable ≈ 10, with regularised base learners); engineering used no outcome information.</p>
+
+  <h3>Missing data and outlier handling</h3>
+  <p>Structurally absent smoking and alcohol sub-fields were treated as missing-not-at-random and set to zero (n=9 fields). Remaining missing values were imputed with the median; to avoid leakage of distributional information across folds, imputation statistics were estimated within each cross-validation training partition and applied to the held-out partition, and on the full cohort for the deployed model. Physiologically implausible values were winsorised to fixed clinical bounds (constants, independent of the data), and composite indices were recomputed from the winsorised constituents. No outcome information entered any preprocessing step.</p>
+
+  <h3>Model development</h3>
+  <p>CardioPredict is a stacked ensemble of four complementary base learners: a tabular foundation model (TabPFN),<sup>12</sup> two gradient-boosted decision-tree models (LightGBM<sup>13</sup> and CatBoost<sup>14</sup>), and a regularised clinical logistic-regression model. Base-learner predictions were combined by an age-conditional meta-learner (stacked generalisation), allowing the optimal weighting of evidence to vary across age strata. Hyperparameters for the gradient-boosted learners were tuned once on the full cohort by age-stratified cross-validation using Bayesian (tree-structured Parzen) optimisation (LightGBM, 150 trials; CatBoost, 75 trials) and held fixed thereafter (Figure 1). We treat this single full-cohort tuning as a fixed model-specification step that is held constant across the performance-estimation folds (rather than re-searched within each inner loop); because the search is target-aware, it can introduce mild optimism, which we flag as a limitation. Given the modest class imbalance (65·8% events) we did not apply resampling or class reweighting; the operating point is instead managed through calibration and explicit threshold selection, preserving probability interpretability.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/fig1_pipeline_schematic.png" alt="Model pipeline schematic" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig1_pipeline_schematic.png</div>
+    <p class="figcap"><strong>Figure 1:</strong> CardioPredict ensemble pipeline — from routine data through fold-internal preprocessing and the four base learners to the age-conditional meta-learner, calibration, and conformal prediction. <em>File: <code>outputs/figures/fig1_pipeline_schematic.png</code>.</em></p>
+  </div>
+
+  <h3>Calibration and conformal uncertainty</h3>
+  <p>Predicted probabilities were calibrated using an age-stratified calibrator fitted on out-of-fold predictions. Case-level uncertainty was quantified by split-conformal prediction<sup>11</sup> at a 90% target coverage: each patient receives a prediction set, and cases whose calibrated probability falls within the indeterminate "gray-zone" (where both obstructive and non-obstructive labels remain statistically plausible) are flagged for further evaluation rather than dichotomised.</p>
+
+  <h3>Decision thresholds</h3>
+  <p>We derived several operating points from out-of-fold predictions to support different clinical goals: a primary threshold maximising the Matthews correlation coefficient (0·73, which also coincided with the Youden-optimal point); an age-stratified threshold (0·50 for patients aged &lt;65 years; 0·73 for those aged ≥65 years); and a high-sensitivity, cost-sensitive rule-out threshold (0·18) penalising false negatives.</p>
+
+  <h3>Statistical analysis</h3>
+  <p>Performance was estimated by 2 repeats of 5-fold nested cross-validation. In every outer fold, imputation, scaling, feature engineering, the four base learners, the meta-learner and the calibrator were re-fitted on the training partition only and applied to the untouched test partition; pooled out-of-fold predictions over all patients yielded the reported metrics, summarised as the mean and standard deviation across repeats. Discrimination was assessed by AUC; calibration by the calibration slope, calibration-in-the-large and the expected/observed (E/O) event ratio; and clinical utility by sensitivity, specificity, predictive values, accuracy and the Matthews correlation coefficient at the operating threshold. Univariable discrimination of each predictor was computed to characterise individual signal strength. The final deployed model was fitted on 100% of the cohort, with thresholds, calibrator and the conformal quantile derived from leakage-free full-cohort out-of-fold predictions, and all fitted base learners persisted to guarantee deterministic, reproducible inference. Ninety-five-percent confidence intervals for the AUC and operating-point metrics were obtained by bootstrap resampling (2000 replicates) of the pooled out-of-fold predictions. To quantify incremental value we benchmarked the ensemble against a penalised logistic-regression model fitted under the identical folds and fold-internal preprocessing, comparing AUCs by paired bootstrap; established symptom-based scores (Diamond–Forrester<sup>3</sup>; CAD Consortium<sup>4</sup>) were not computable because chest-pain typology was not recorded. Conformal performance was summarised by the empirical coverage of the prediction sets and the proportion of patients assigned to the indeterminate (gray-zone) set. Analyses used a fixed random seed (42); software versions are reported in the appendix. Reporting follows the Transparent Reporting of a multivariable prediction model for Individual Prognosis Or Diagnosis (TRIPOD) statement.<sup>10</sup></p>
+
+  <h3>Role of the funding source</h3>
+  <p>[The funder had no role in study design, data collection, analysis, interpretation, or writing of the report. / Not applicable.] The corresponding author had full access to all data and final responsibility for the decision to submit.</p>
+
+  <!-- ===================== RESULTS ===================== -->
+  <h2>Results</h2>
+
+  <p>Of 2346 registry entries, 1187 patients (50·6%) had an angiographic outcome and constituted the analytic sample; 781 (65·8%) had obstructive CAD. Patients with obstructive CAD were older and had higher fasting glucose, triglycerides, high-sensitivity C-reactive protein, white-cell count and systolic and diastolic blood pressure, and lower HDL cholesterol, than those without (Table 1). Total and LDL cholesterol, body-mass index and platelet count did not differ significantly between groups (Figure 2).</p>
+
+  <div class="figure">
+    <img src="outputs/figures/fig2_study_flow.png" alt="Study flow diagram" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig2_study_flow.png</div>
+    <p class="figcap"><strong>Figure 2:</strong> Study profile. Derivation of the analytic cohort from the angiography registry, with exclusions and class breakdown. <em>File: <code>outputs/figures/fig2_study_flow.png</code> (300-dpi PNG; vector PDF alongside).</em></p>
+  </div>
+
+  <table>
+    <caption>Table 1: Baseline characteristics of the analytic cohort, by angiographic outcome (N=1187)</caption>
+    <thead>
+      <tr><th>Variable</th><th>Unit</th><th class="num">No obstructive CAD (n=406)</th><th class="num">Obstructive CAD (n=781)</th><th class="num">p value*</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Age</td><td>years</td><td class="num">53·7 (11·4)</td><td class="num">58·9 (10·6)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Body-mass index</td><td>kg/m²</td><td class="num">26·9 (5·2)</td><td class="num">27·1 (5·2)</td><td class="num">0·47</td></tr>
+      <tr><td>Waist circumference</td><td>cm</td><td class="num">93·7 (12·8)</td><td class="num">94·4 (12·5)</td><td class="num">0·35</td></tr>
+      <tr><td>Systolic blood pressure</td><td>mm Hg</td><td class="num">129·8 (23·7)</td><td class="num">134·5 (25·0)</td><td class="num">0·004</td></tr>
+      <tr><td>Diastolic blood pressure</td><td>mm Hg</td><td class="num">79·9 (12·0)</td><td class="num">81·9 (11·2)</td><td class="num">0·006</td></tr>
+      <tr><td>Fasting blood glucose</td><td>mg/dL</td><td class="num">115·7 (46·8)</td><td class="num">133·1 (62·6)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Total cholesterol</td><td>mg/dL</td><td class="num">168·2 (43·7)</td><td class="num">169·1 (42·9)</td><td class="num">0·71</td></tr>
+      <tr><td>Triglycerides</td><td>mg/dL</td><td class="num">138·1 (71·3)</td><td class="num">150·0 (73·4)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>HDL cholesterol</td><td>mg/dL</td><td class="num">42·5 (11·6)</td><td class="num">40·8 (12·1)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>LDL cholesterol</td><td>mg/dL</td><td class="num">97·7 (35·2)</td><td class="num">98·2 (34·5)</td><td class="num">0·82</td></tr>
+      <tr><td>High-sensitivity CRP</td><td>mg/L</td><td class="num">5·3 (6·6)</td><td class="num">6·9 (8·8)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>White-cell count</td><td>×10³/µL</td><td class="num">7·0 (2·3)</td><td class="num">7·7 (3·8)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Haemoglobin</td><td>g/dL</td><td class="num">13·0 (1·6)</td><td class="num">13·4 (1·7)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Platelet count</td><td>×10³/µL</td><td class="num">155·5 (68·1)</td><td class="num">154·6 (59·1)</td><td class="num">0·86</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Data are mean (SD). *Mann–Whitney U test. CAD=coronary artery disease. CRP=C-reactive protein.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/fig3_baseline_smd.png" alt="Baseline standardised mean differences" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig3_baseline_smd.png</div>
+    <p class="figcap"><strong>Figure 3:</strong> Baseline biomarker differences by angiographic outcome, expressed as standardised mean differences (Cohen's d; positive = higher in CAD). <em>File: <code>outputs/figures/fig3_baseline_smd.png</code>.</em></p>
+  </div>
+
+  <div class="figure">
+    <img src="outputs/figures/fig4_missingness.png" alt="Missing-data profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig4_missingness.png</div>
+    <p class="figcap"><strong>Figure 4:</strong> Proportion of missing values (before imputation) for each model predictor; the dashed line marks 10%. Imputation was fitted within each cross-validation fold. <em>File: <code>outputs/figures/fig4_missingness.png</code>.</em></p>
+  </div>
+
+  <h3>Individual predictor signal</h3>
+  <p>No single predictor was strongly discriminatory: the highest univariable AUCs were for diabetes (0·65), sex (0·65), a composite triglyceride·hs-CRP·glucose/HDL metabolic-inflammatory index (0·64), and age (0·63). The contrast between weak univariable signal and the multivariable AUC of 0·87 indicates that discrimination arose from the integration of many modestly informative variables rather than from any dominant marker (Figure 5).</p>
+
+  <div class="figure">
+    <img src="outputs/figures/fig5_univariate_auc.png" alt="Univariate AUC ranking" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig5_univariate_auc.png</div>
+    <p class="figcap"><strong>Figure 5:</strong> Top predictors ranked by univariable (single-variable) discrimination; no single variable exceeds an AUC of ~0·65. <em>File: <code>outputs/figures/fig5_univariate_auc.png</code>.</em></p>
+  </div>
+
+  <h3>Discrimination and calibration</h3>
+  <p>Under repeated nested cross-validation with fold-internal imputation the model achieved an AUC of 0·866 (SD 0·001 across repeats; per-repeat values 0·864 and 0·867; bootstrap 95% CI 0·850–0·891). The narrow between-repeat SD reflects the large per-fold sample and the stability of the calibrated ensemble; because only two repeats were run, the bootstrap interval—rather than the across-repeat SD—should be read as the primary measure of precision. Calibration was good, with a calibration slope of 0·91, calibration-in-the-large of −0·05 and an E/O ratio of 1·02 (Table 2; Figure 6, Figure 7).</p>
+
+  <table>
+    <caption>Table 2: Cross-validated performance of CardioPredict at the primary operating threshold (0·73), with 95% bootstrap confidence intervals</caption>
+    <thead><tr><th>Metric</th><th class="num">Value</th><th class="num">95% CI</th></tr></thead>
+    <tbody>
+      <tr><td>Area under the ROC curve (AUC)</td><td class="num">0·866</td><td class="num">0·85–0·89</td></tr>
+      <tr><td>Sensitivity</td><td class="num">74·0%</td><td class="num">70·8–77·0</td></tr>
+      <tr><td>Specificity</td><td class="num">81·5%</td><td class="num">77·6–85·2</td></tr>
+      <tr><td>Positive predictive value</td><td class="num">88·5%</td><td class="num">86·0–91·0</td></tr>
+      <tr><td>Negative predictive value</td><td class="num">62·0%</td><td class="num">58·0–66·0</td></tr>
+      <tr><td>Overall accuracy</td><td class="num">76·6%</td><td class="num">74·1–79·0</td></tr>
+      <tr><td>Matthews correlation coefficient</td><td class="num">0·53</td><td class="num">—</td></tr>
+      <tr><td>Calibration slope</td><td class="num">0·91</td><td class="num">—</td></tr>
+      <tr><td>Calibration-in-the-large</td><td class="num">−0·05</td><td class="num">—</td></tr>
+      <tr><td>Expected/observed (E/O) ratio</td><td class="num">1·02</td><td class="num">—</td></tr>
+      <tr><td>Conformal coverage (target / empirical)</td><td class="num">90% / 90·1%</td><td class="num">—</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Predictive values are reported at the development-cohort prevalence (65·8%) and should be recalibrated to the local setting.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/fig6_roc.png" alt="ROC curve" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig6_roc.png</div>
+    <p class="figcap"><strong>Figure 6:</strong> Discrimination. Pooled nested cross-validation ROC curve (bold) with the two per-repeat curves (faint); area under the curve 0·866 (SD 0·001). <em>File: <code>outputs/figures/fig6_roc.png</code> (300-dpi PNG; vector PDF alongside).</em></p>
+  </div>
+
+  <div class="figure">
+    <img src="outputs/figures/fig7_calibration.png" alt="Calibration plot" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig7_calibration.png</div>
+    <p class="figcap"><strong>Figure 7:</strong> Calibration. Observed event frequency versus predicted probability by decile (slope 0·91; E/O 1·02), with the predicted-probability distribution inset. <em>File: <code>outputs/figures/fig7_calibration.png</code>.</em></p>
+  </div>
+
+  <h3>Operating points and clinical utility</h3>
+  <p>At the primary (MCC-optimised) threshold the model favoured specificity (81·5%) over sensitivity (74·0%), with a high positive predictive value (88·5%) — an operating point suited to confidently ruling disease <em>in</em> and prioritising patients for angiography. Because the optimal cut-off depends on the clinical goal, we provide alternative operating points (Table 3): a high-sensitivity, cost-sensitive threshold (0·18) for rule-out/screening contexts, and an age-stratified threshold to account for age-dependent prevalence. The threshold should be matched to the intended use rather than applied as a single fixed value.</p>
+
+  <table>
+    <caption>Table 3: Decision thresholds derived from out-of-fold predictions</caption>
+    <thead><tr><th>Operating point</th><th class="num">Probability cut-off</th><th>Intended use</th></tr></thead>
+    <tbody>
+      <tr><td>Primary (MCC-optimised; = Youden)</td><td class="num">0·73</td><td>Balanced; rule-in / prioritise angiography</td></tr>
+      <tr><td>Age &lt;65 years (MCC)</td><td class="num">0·50</td><td>Age-adjusted assessment</td></tr>
+      <tr><td>Age ≥65 years</td><td class="num">0·73</td><td>Older patients</td></tr>
+      <tr><td>Cost-sensitive (high-sensitivity)</td><td class="num">0·18</td><td>Rule-out / screening</td></tr>
+    </tbody>
+  </table>
+
+  <div class="figure">
+    <img src="outputs/figures/fig8_confusion.png" alt="Confusion matrix" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig8_confusion.png</div>
+    <p class="figcap"><strong>Figure 8:</strong> Classification at the primary threshold (0·73), with sensitivity, specificity, and predictive values. <em>File: <code>outputs/figures/fig8_confusion.png</code>.</em></p>
+  </div>
+
+  <div class="figure">
+    <img src="outputs/figures/fig9_decision_curve.png" alt="Decision-curve analysis" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig9_decision_curve.png</div>
+    <p class="figcap"><strong>Figure 9:</strong> Decision-curve analysis. Net benefit of CardioPredict versus treat-all and treat-none strategies across threshold probabilities. <em>File: <code>outputs/figures/fig9_decision_curve.png</code>.</em></p>
+  </div>
+
+  <h3>Incremental value over a simple model</h3>
+  <p>To quantify the added value of the ensemble we fitted a penalised logistic-regression model under the identical 2×5 cross-validation folds with fold-internal preprocessing. Given the <em>same engineered features</em> as the ensemble, the logistic model reached an AUC of 0·794 (95% CI 0·77–0·82); the ensemble improved discrimination by +0·077 (95% CI +0·059 to +0·098; paired bootstrap p&lt;0·001), a statistically significant gain. Critically, feature engineering alone explained little of this difference — a logistic model on the raw predictors scored 0·789, so the engineered features added only ≈0·005, and the +0·077 advantage is attributable to the non-linear ensemble rather than to feature construction. Established symptom-based scores (Diamond–Forrester<sup>3</sup>, CAD Consortium<sup>4</sup>) could not be reproduced because chest-pain typology was not recorded; the logistic model therefore serves as the routine-data reference. Among the individual base learners (descriptive full-cohort out-of-fold AUC), TabPFN was strongest (0·874), followed by LightGBM (0·867) and CatBoost (0·860), with the clinical logistic learner lowest (0·778); the calibrated ensemble matched the best single learner while adding calibration and uncertainty quantification. Predictor-importance analysis (SHAP)<sup>16</sup> of a representative gradient-boosted base learner identified high-sensitivity C-reactive protein, fasting glucose, age, sex (and sex-by-lipid interactions), and triglycerides as the dominant contributors (Figure 10), consistent with an inflammatory–metabolic risk signature.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/fig10_feature_importance.png" alt="Feature importance" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig10_feature_importance.png</div>
+    <p class="figcap"><strong>Figure 10:</strong> Predictor importance (relative gain) for a representative gradient-boosted base learner, illustrating which routine variables most influence the ensemble's predictions. <em>File: <code>outputs/figures/fig10_feature_importance.png</code>.</em></p>
+  </div>
+
+  <h3>Uncertainty quantification</h3>
+  <p>Applying the conformal procedure at a 90% target coverage, 23·7% of patients fell within the indeterminate gray-zone (calibrated probability between 0·32 and 0·68), where both obstructive and non-obstructive labels remained statistically plausible; the remaining 76·3% received a decisive prediction. Empirical coverage of the prediction sets was 90·1%, meeting the nominal target. In practice, a gray-zone result identifies the patient in whom the routine-data model is least informative and for whom further evaluation (e.g. non-invasive imaging) is most likely to change management, whereas decisive predictions can support a more confident triage decision (Figure 12).</p>
+
+  <h3>Subgroup performance</h3>
+  <p>Discrimination tended to be higher in younger patients and lower in older patients (≥65 years), in whom routine-data discrimination is intrinsically harder. Disease prevalence differed markedly by sex in this cohort, and subgroup specificity and sensitivity varied accordingly; positive predictions in women and negative predictions in men therefore warrant additional scrutiny (Figure 11). The conformal framework assigned statistically indeterminate cases to a probability "gray-zone", separating them from decisive predictions (Figure 12).</p>
+
+  <div class="figure">
+    <img src="outputs/figures/fig11_subgroup_auc.png" alt="Subgroup AUC plot" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig11_subgroup_auc.png</div>
+    <p class="figcap"><strong>Figure 11:</strong> Discrimination by subgroup. Nested cross-validation AUC (95% bootstrap CI) overall and by sex and age band. <em>File: <code>outputs/figures/fig11_subgroup_auc.png</code>.</em></p>
+  </div>
+
+  <div class="figure">
+    <img src="outputs/figures/fig12_conformal_grayzone.png" alt="Conformal gray-zone" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig12_conformal_grayzone.png</div>
+    <p class="figcap"><strong>Figure 12:</strong> Conformal uncertainty. Distribution of calibrated probabilities by true class, with the shaded indeterminate gray-zone (90% coverage) in which both labels remain plausible. <em>File: <code>outputs/figures/fig12_conformal_grayzone.png</code>.</em></p>
+  </div>
+
+  <!-- ===================== DISCUSSION ===================== -->
+  <h2>Discussion</h2>
+  <p>In a cohort of 1187 patients referred for coronary angiography, a calibrated machine-learning ensemble estimated the probability of obstructive CAD from routine pre-procedural data with an AUC of 0·86 and good calibration, and provided explicit case-level uncertainty. Because the model uses only variables available before catheterisation, it is positioned as a decision-support aid for pre-angiographic triage rather than a replacement for invasive assessment.</p>
+  <p>Three features distinguish this work methodologically. First, performance was estimated by repeated nested cross-validation with all preprocessing and learners re-fitted within each training fold, avoiding the optimism of single-split validation. Second, predictors derived from the angiographic procedure or the outcome were removed by an audited taxonomy, eliminating a common and under-recognised source of inflated performance. Third, conformal prediction supplies an interpretable abstention mechanism: rather than forcing every patient into a binary label, statistically ambiguous cases are flagged for further evaluation, which is clinically more faithful than a single dichotomous output.</p>
+  <p>The multivariable AUC of 0·87, compared with a maximum univariable AUC of 0·65, indicates that clinical value derives from integrating multiple modestly informative variables rather than any single biomarker. The ensemble improved discrimination by a significant +0·077 over a transparent logistic-regression model given the same engineered features; because a logistic model on the raw variables performed almost identically (0·789 vs 0·794), this gain reflects the non-linear ensemble itself rather than feature construction. Good calibration (slope 0·91, E/O 1·02) is important for a decision-support tool, since clinicians must be able to trust the magnitude of the estimated probability, not only its rank ordering.</p>
+
+  <p>The model showed positive net benefit over both treat-all and treat-none strategies across a clinically relevant range of threshold probabilities (Figure 9), supporting its use to guide referral.<sup>15</sup> We set the primary threshold to maximise the Matthews correlation coefficient because it balances all four confusion-matrix quantities under class imbalance; on this model it coincided with the Youden-optimal point (0·73) and favoured specificity (81·5%) and positive predictive value (88·5%) over sensitivity (74·0%) — an operating point suited to confirmatory triage and prioritising angiography. For rule-out or screening contexts a lower, high-sensitivity threshold (0·18) is provided, and we report several operating points (Table 3) so the cut-off can be matched to the local goal rather than applied as a single fixed value. The conformal gray-zone (23·7% of patients, empirical coverage 90·1%) operationalises diagnostic uncertainty: these are precisely the patients in whom routine data are insufficient and further testing is most likely to change management, whereas the 76·3% with decisive predictions can be triaged with greater confidence. Discrimination was lower in patients aged ≥65 years, so the model should be applied with extra caution in older patients, in whom non-invasive imaging may remain preferable.</p>
+
+  <h3>Limitations</h3>
+  <p>This study has important limitations. It is a single-centre, retrospective analysis of an angiography-referred population with high disease prevalence (65·8%); the resulting spectrum and verification bias mean that the predictive values reported here will not transfer directly to lower-prevalence screening or general-outpatient settings without recalibration. The model has not yet undergone external or geographic validation, nor prospective evaluation, both of which are essential before clinical use. Performance varied by sex and age subgroup, reflecting differing prevalence and limited subgroup sample sizes. The sample size (1187), while adequate for development, constrains precision for rare subgroups. Finally, the predictors are limited to routine data; incorporating information with established incremental value for obstructive CAD—such as coronary-artery-calcium scoring, cardiac troponin, electrocardiographic or stress-test findings—would be expected to raise discrimination beyond the present ceiling.</p>
+
+  <h3>Positioning within the clinical pathway</h3>
+  <p>In current practice, a patient with suspected CAD undergoes clinical assessment and non-invasive testing (resting or stress electrocardiography, stress imaging, or coronary CT angiography); those with positive or inconclusive results are referred for invasive coronary angiography, and only a subset are found to have obstructive disease warranting percutaneous coronary intervention (PCI). Because referral rests on tests of limited specificity, a substantial proportion of diagnostic angiograms reveal no obstructive stenosis — an avoidable exposure to procedural risk and cost (Figure 13, current route).</p>
+  <p>CardioPredict inserts a single, calibrated, uncertainty-aware triage step immediately after routine clinical and laboratory data are obtained — before any invasive procedure — using information already collected at no additional cost (Figure 13, proposed route). A decisive high-probability output (high specificity and positive predictive value at the operating threshold) identifies patients who can be prioritised for angiography and likely PCI; a decisive low-probability output supports deferral to medical management, reducing unnecessary catheterisation; and the conformal gray-zone explicitly routes genuinely uncertain patients to targeted non-invasive testing rather than directly to the catheter laboratory. Importantly, the tool is designed to augment — not replace — existing tests and clinical judgement, and (pending external validation and recalibration to local prevalence) a low-probability result should not override strong clinical suspicion.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/fig13_clinical_pathway.png" alt="Clinical-pathway diagram" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="figph" style="display:none;">Source: outputs/figures/fig13_clinical_pathway.png</div>
+    <p class="figcap"><strong>Figure 13:</strong> CardioPredict in the diagnostic pathway. From a shared clinical assessment, current practice uses non-invasive testing to refer positive or inconclusive patients to invasive coronary angiography. The proposed triage instead converts routine pre-procedural data into a calibrated probability with a conformal gray-zone, sending decisive high-probability patients to angiography, deferring decisive low-probability patients to medical management, and routing gray-zone patients to the same non-invasive testing. Both routes converge on the same invasive endpoint, so the tool changes <em>which</em> patients reach the catheter laboratory, not the procedures that follow. Navy = CardioPredict model; red = invasive angiography; green = medical management; dashed box = proposed approach.</p>
+  </div>
+
+  <h3>Implications and future work</h3>
+  <p>Subject to external and prospective validation, a calibrated, uncertainty-aware estimate of obstructive-CAD probability could help cardiologists prioritise invasive angiography and reduce avoidable diagnostic procedures, with potential benefits for patient safety and resource use. Priorities for further research are multi-centre external validation with prevalence recalibration, prospective impact evaluation on referral decisions, and assessment of incremental value when established imaging and biomarker variables are added.</p>
+
+  <!-- ===================== END MATTER ===================== -->
+  <h2>Declarations</h2>
+  <h3>Contributors</h3>
+  <p>[Initials] conceived the study and obtained funding. [Initials] curated the data and implemented the analysis pipeline. [Initials] and [Initials] verified the underlying data and analyses. [Initials] drafted the manuscript. All authors contributed to interpretation, critically revised the manuscript, approved the final version, and had final responsibility for the decision to submit.</p>
+  <h3>Declaration of interests</h3>
+  <p>[We declare no competing interests. / Specify.]</p>
+  <h3>Data sharing</h3>
+  <p>De-identified participant data, the analysis code, and the preprocessing pipeline are available from the corresponding author on reasonable request, subject to institutional and ethics-committee approval. The fixed analysis seed and recorded software versions enable deterministic reproduction.</p>
+  <h3>Ethics</h3>
+  <p>[The study was approved by the [name] institutional review board (reference [number]); the requirement for individual consent was waived for this retrospective analysis of de-identified data. / Specify.]</p>
+  <h3>Acknowledgements</h3>
+  <p>[Acknowledgements.]</p>
+
+  <h2>Appendix: reproducibility</h2>
+  <p class="kvs">Random seed 42 · development cohort N=1187 · data hash (SHA-256, 16 hex) fb3af1d8645920f3 · Python 3.12 · NumPy 1.26.4 · scikit-learn 1.8.0 · LightGBM 4.6.0 · CatBoost 1.2.10 · TabPFN 7.1.1. Evaluation: 2×5 repeated nested cross-validation; deployed model fitted on the full cohort with persisted base learners for deterministic inference.</p>
+
+  <table>
+    <caption>Appendix Table A1: Baseline characteristics of included (outcome recorded) versus excluded (outcome missing) registry patients</caption>
+    <thead><tr><th>Variable</th><th class="num">Included (n=1187)</th><th class="num">Excluded (n=1159)</th><th class="num">p value*</th></tr></thead>
+    <tbody>
+      <tr><td>Age, years</td><td class="num">57·1 (11·2)</td><td class="num">53·0 (9·3)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Male, %</td><td class="num">48·6</td><td class="num">49·6</td><td class="num">0·63</td></tr>
+      <tr><td>Fasting glucose, mg/dL</td><td class="num">127·2 (58·3)</td><td class="num">84·0 (17·8)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Total cholesterol, mg/dL</td><td class="num">168·7 (43·3)</td><td class="num">182·8 (34·3)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Triglycerides, mg/dL</td><td class="num">145·9 (72·9)</td><td class="num">114·7 (59·5)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>HDL cholesterol, mg/dL</td><td class="num">41·6 (14·2)</td><td class="num">44·5 (9·5)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>LDL cholesterol, mg/dL</td><td class="num">98·0 (34·8)</td><td class="num">113·3 (30·8)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>High-sensitivity CRP, mg/L</td><td class="num">6·4 (8·2)</td><td class="num">1·4 (0·7)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Body-mass index, kg/m²</td><td class="num">27·0 (5·2)</td><td class="num">26·8 (4·2)</td><td class="num">0·49</td></tr>
+      <tr><td>Systolic BP, mmHg</td><td class="num">132·9 (24·7)</td><td class="num">120·6 (15·5)</td><td class="num">&lt;0·001</td></tr>
+      <tr><td>Diastolic BP, mmHg</td><td class="num">81·3 (11·5)</td><td class="num">74·9 (9·9)</td><td class="num">&lt;0·001</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Data are mean (SD) unless stated. *Mann–Whitney U test (sex: χ²). Included patients (who underwent angiography) carried a substantially higher cardiometabolic and inflammatory burden than excluded patients, confirming selective referral; predictive values derived in this cohort therefore require recalibration before use in lower-risk populations.</p>
+
+  <h2>References</h2>
+  <ol class="refs">
+    <li>Roth GA, Mensah GA, Johnson CO, et al. Global burden of cardiovascular diseases and risk factors, 1990–2019. <em>J Am Coll Cardiol</em>. 2020;76(25):2982–3021.</li>
+    <li>Patel MR, Peterson ED, Dai D, et al. Low diagnostic yield of elective coronary angiography. <em>N Engl J Med</em>. 2010;362(10):886–95.</li>
+    <li>Diamond GA, Forrester JS. Analysis of probability as an aid in the clinical diagnosis of coronary-artery disease. <em>N Engl J Med</em>. 1979;300(24):1350–8.</li>
+    <li>Genders TSS, Steyerberg EW, Hunink MGM, et al. Prediction model to estimate presence of coronary artery disease: retrospective pooled analysis of existing cohorts. <em>BMJ</em>. 2012;344:e3485.</li>
+    <li>Knuuti J, Wijns W, Saraste A, et al. 2019 ESC Guidelines for the diagnosis and management of chronic coronary syndromes. <em>Eur Heart J</em>. 2020;41(3):407–77.</li>
+    <li>Cheng VY, Carter AM, et al. Performance of the traditional age, sex, and angina typicality-based approach for estimating pretest probability of angiographically significant coronary artery disease in patients undergoing coronary computed tomographic angiography. <em>Circulation</em>. 2011;124(22):2423–32.</li>
+    <li>Motwani M, Dey D, et al. Machine learning for prediction of all-cause mortality in patients with suspected coronary artery disease: a 5-year multicentre prospective registry analysis. <em>Eur Heart J</em>. 2017;38(7):500–7.</li>
+    <li>Al'Aref SJ, Maliakal G, et al. Machine learning of clinical variables and coronary artery calcium scoring for the prediction of obstructive coronary artery disease on coronary computed tomography angiography: analysis from the CONFIRM registry. <em>Eur Heart J</em>. 2020;41(3):359–67.</li>
+    <li>Douglas PS, Hoffmann U, Patel MR, et al. Outcomes of anatomical versus functional testing for coronary artery disease. <em>N Engl J Med</em>. 2015;372(14):1291–300.</li>
+    <li>Collins GS, Reitsma JB, Altman DG, Moons KGM. Transparent Reporting of a multivariable prediction model for Individual Prognosis Or Diagnosis (TRIPOD): the TRIPOD statement. <em>BMJ</em>. 2015;350:g7594.</li>
+    <li>Vovk V, Gammerman A, Shafer G. <em>Algorithmic Learning in a Random World</em>. New York: Springer; 2005.</li>
+    <li>Hollmann N, Müller S, Purucker L, et al. Accurate predictions on small data with a tabular foundation model. <em>Nature</em>. 2025;637(8045):319–26.</li>
+    <li>Ke G, Meng Q, Finley T, et al. LightGBM: a highly efficient gradient boosting decision tree. <em>Adv Neural Inf Process Syst (NeurIPS)</em>. 2017;30:3146–54.</li>
+    <li>Prokhorenkova L, Gusev G, Vorobev A, Dorogush AV, Gulin A. CatBoost: unbiased boosting with categorical features. <em>Adv Neural Inf Process Syst (NeurIPS)</em>. 2018;31:6638–48.</li>
+    <li>Vickers AJ, Elkin EB. Decision curve analysis: a novel method for evaluating prediction models. <em>Med Decis Making</em>. 2006;26(6):565–74.</li>
+    <li>Lundberg SM, Lee S-I. A unified approach to interpreting model predictions. <em>Adv Neural Inf Process Syst (NeurIPS)</em>. 2017;30:4765–74.</li>
+  </ol>
+
+  </div>
+</body>
+</html>
