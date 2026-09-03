@@ -1,0 +1,176 @@
+{
+  "ensemble": {
+    "auc": {
+      "point": 0.8715569277735378,
+      "ci_low": 0.8503889335998607,
+      "ci_high": 0.8910714229737962
+    },
+    "sensitivity": {
+      "point": 0.7400768245838668,
+      "ci_low": 0.7083843838752066,
+      "ci_high": 0.7699395212630507
+    },
+    "specificity": {
+      "point": 0.8152709359605911,
+      "ci_low": 0.7758557611438184,
+      "ci_high": 0.852275432900433
+    },
+    "ppv": {
+      "point": 0.885145482388974,
+      "ci_low": 0.8603157349896481,
+      "ci_high": 0.9095059003693361
+    },
+    "npv": {
+      "point": 0.6198501872659176,
+      "ci_low": 0.5798479087452472,
+      "ci_high": 0.6604960800216275
+    },
+    "accuracy": {
+      "point": 0.7657961246840775,
+      "ci_low": 0.7405223251895535,
+      "ci_high": 0.7902274641954508
+    }
+  },
+  "calibration_nested_cv": {
+    "slope": 0.9049841146384935,
+    "intercept": -0.04947142608099897,
+    "eo_ratio": 1.0167865418124795,
+    "citl": -0.04947142608099897
+  },
+  "conformal_deployed_qhat": {
+    "q_hat": 0.6775961370539361,
+    "gray_zone_lower": 0.32240386294606393,
+    "gray_zone_upper": 0.6775961370539361,
+    "pct_indeterminate": 23.336141533277168,
+    "empirical_coverage": 89.97472620050547,
+    "pct_decisive": 76.66385846672283
+  },
+  "conformal_nested_cv": {
+    "q_hat": 0.6806613888543878,
+    "empirical_coverage": 90.14321819713564,
+    "pct_indeterminate": 23.67312552653749,
+    "gray_zone_lower": 0.31933861114561224,
+    "gray_zone_upper": 0.6806613888543878
+  },
+  "comparator_logistic_engineered": {
+    "auc": 0.7942356332351475,
+    "ci_low": 0.7668057669125009,
+    "ci_high": 0.8205540441722884,
+    "delta_auc_ensemble_minus_lr": 0.07732129453839032,
+    "delta_ci_low": 0.05869583975980139,
+    "delta_ci_high": 0.09758632123180874,
+    "delta_p": 0.0,
+    "note": "Penalised LR on the SAME engineered features as the ensemble (fair comparison), same 2x5 folds + fold-internal preprocessing."
+  },
+  "comparator_logistic_raw": {
+    "auc": 0.7888806191380258,
+    "note": "Penalised LR on raw predictors only (no feature engineering)."
+  },
+  "base_learner_oof_auc": {
+    "TabPFN": 0.8740846331909955,
+    "LightGBM": 0.8671811432860486,
+    "ClinicalLR": 0.7780728256687459,
+    "CatBoost": 0.8598361327841658
+  },
+  "included_vs_excluded": {
+    "n_included": 1187,
+    "n_excluded": 1159,
+    "rows": [
+      {
+        "variable": "Age",
+        "unit": "years",
+        "included_mean": 57.11373209772536,
+        "included_sd": 11.153748686104974,
+        "excluded_mean": 52.967213114754095,
+        "excluded_sd": 9.347759981153292,
+        "p": 3.548029670380766e-18
+      },
+      {
+        "variable": "FBG",
+        "unit": "mg/dL",
+        "included_mean": 127.19039595619208,
+        "included_sd": 58.26023906357816,
+        "excluded_mean": 83.95271786022433,
+        "excluded_sd": 17.768421294079175,
+        "p": 2.4635480442185633e-193
+      },
+      {
+        "variable": "TC",
+        "unit": "mg/dL",
+        "included_mean": 168.73378264532434,
+        "included_sd": 43.27335633772595,
+        "excluded_mean": 182.83097497842965,
+        "excluded_sd": 34.338659447348796,
+        "p": 5.824408077567929e-31
+      },
+      {
+        "variable": "TG",
+        "unit": "mg/dL",
+        "included_mean": 145.93260320134794,
+        "included_sd": 72.89560675511046,
+        "excluded_mean": 114.73744607420191,
+        "excluded_sd": 59.45794870274413,
+        "p": 6.086836984217793e-46
+      },
+      {
+        "variable": "HDL_C",
+        "unit": "mg/dL",
+        "included_mean": 41.58733782645324,
+        "included_sd": 14.176612827267396,
+        "excluded_mean": 44.46833477135462,
+        "excluded_sd": 9.544657689121797,
+        "p": 4.0249025477289386e-18
+      },
+      {
+        "variable": "LDL_C",
+        "unit": "mg/dL",
+        "included_mean": 98.0447346251053,
+        "included_sd": 34.75955926110803,
+        "excluded_mean": 113.26667503333594,
+        "excluded_sd": 30.78733063170918,
+        "p": 4.3497898151686286e-42
+      },
+      {
+        "variable": "hs_CRP",
+        "unit": "mg/L",
+        "included_mean": 6.380080876158383,
+        "included_sd": 8.172292078401348,
+        "excluded_mean": 1.4001164797238999,
+        "excluded_sd": 0.6558729033509052,
+        "p": 8.287448952689908e-211
+      },
+      {
+        "variable": "BMI",
+        "unit": "kg/m\u00b2",
+        "included_mean": 27.042642298901757,
+        "included_sd": 5.184372317465936,
+        "excluded_mean": 26.77317801633576,
+        "excluded_sd": 4.187711233971589,
+        "p": 0.48474056940979315
+      },
+      {
+        "variable": "Systolic_Blood_Pressure",
+        "unit": "mmHg",
+        "included_mean": 132.88121314237574,
+        "included_sd": 24.66777996719975,
+        "excluded_mean": 120.60518550474545,
+        "excluded_sd": 15.497831820473442,
+        "p": 3.0925088915766104e-34
+      },
+      {
+        "variable": "Diastolic_Blood_Pressure",
+        "unit": "mmHg",
+        "included_mean": 81.2535804549284,
+        "included_sd": 11.478209881930546,
+        "excluded_mean": 74.87572907679034,
+        "excluded_sd": 9.896646409492284,
+        "p": 1.0105183906662797e-42
+      }
+    ],
+    "sex": {
+      "included_male_pct": 48.60994102780118,
+      "excluded_male_pct": 49.61173425366695
+    }
+  },
+  "threshold": 0.7267645399067559
+}

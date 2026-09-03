@@ -1,0 +1,414 @@
+
+(.venv) abolfazl@abolfazl-System-Product-Name:~/PycharmProjects/PythonProject5/angio_updated$ ./start.sh --train --n-tabpfn-estimators 16 --outer-folds 5 --outer-repeats 2 --inner-repeats 1
+[train] Starting CardioPredict training pipeline...
+/home/abolfazl/PycharmProjects/PythonProject5/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+============================================================================
+  CAD v17 — PRODUCTION trainer (nested CV + full-data deterministic)
+============================================================================
+  seed=42 tabpfn=True device=CPU outer=5x2 inner_cv_repeats=1 final_inner_repeats=10
+[clean] removed stale outputs: none
+[1] Loading data from /home/abolfazl/PycharmProjects/PythonProject5/angio_updated/cardiopredict/load_data/Tajfard Angio CAD & Healthy 8 (New) (2346 Samples) - Edit on 23.2.2014 .csv ...
+[1/7] Loading raw data …
+   Raw table : 2346 rows × 223 columns
+   Sentinel 999→NaN: column "Changing_in_Diet_due_to_Diseases" (2 values)
+   Sentinel 999→NaN: column "Medicine_Category" (139 values)
+   Sentinel 999 → NaN applied to all numeric columns.
+
+   Capturing raw data snapshot for column audit report …
+   Raw snapshot complete (223 columns).
+
+[2/7] Defining column taxonomy …
+
+[3/7] Extracting target variable …
+   Unique numeric values: [0.0, 1.0]
+   Dropped 1159 rows with missing target.  Working N = 1187
+
+   ── Missing-target breakdown ──
+   Feature                           Kept(%NaN)  Dropped(%NaN)
+   Age                                   0.0%      0.0%
+   Gender                                0.0%      0.0%
+   FBG                                   0.0%      0.0%
+   TC                                    0.0%      0.0%
+   TG                                    0.0%      0.0%
+   Systolic_Blood_Pressure               0.0%      0.0%
+   → Report: "Of 2346 registrants, 1159 (49.4%) lacked an angio result and were excluded; the analytic sample comprised N=1187."
+
+   Capturing working-set raw snapshot …
+   Working-set raw snapshot complete.
+
+   §4d  Checking for duplicate rows (7-variable proxy key) …
+        Proxy key columns (7): Age, Gender, FBG, TC, BMI, TG, Hb
+   §4d  No duplicate rows detected with extended key.  ✓
+
+[4/7] Running preprocessing pipeline …
+   5.1  Dropped column: "ID"
+   5.1  Dropped column: "Computer_Code"
+   5.1  Dropped column: "Describe_Type_of_Changing_in_Diet"
+   5.1  Dropped column: "Anxiety_Desc"
+   5.1  Dropped column: "Giving_up_Reason"
+   5.1  Dropped 5 identifier / free-text columns.
+   5.2  Removed 69 leakage columns.
+   5.3  Recoded 37 binary (1/2 → 1/0) columns.
+   CHECK §5.3: "Changing_in_Diet_due_to_Diseases" post-recode values = [0.0, 1.0].  ✓
+   Ternary 3→NaN in "Current_Cigarette_Smoking" (7 values)
+   Ternary 3→NaN in "Tobacco_Use_by_Cigarette" (1 values)
+   Ternary 3→NaN in "Tobacco_Use_by_Waterpipe" (6 values)
+   Ternary 3→NaN in "Use_Drugs" (3 values)
+   Ternary 3→NaN in "Tobacco_Used_by_Cigarette" (32 values)
+   Ternary 3→NaN in "Tobacco_Used_by_Waterpipe" (5 values)
+   Ternary 3→NaN in "Used_Drugs" (2 values)
+   Ternary 3→NaN in "Any_Change_in_Last_Year_Activity_Level" (352 values)
+   5.3b Encoded ordinal column: "Depression_Result1" (N/Mi/Mo/S → 0/1/2/3)
+   5.3b Encoded ordinal column: "Depression_Result2" (N/Mi/Mo/S → 0/1/2/3)
+   5.4a MNAR: Smoking sub-fields imputed with 0 (structural zeros).
+   5.4b MNAR: Alcohol sub-fields imputed with 0 (structural zeros).
+        Columns: Alcoholic_Drinking_Dosage, Alcoholic_Type, Alcoholic_Drinking_Habit, How_Many_Time_per
+   5.4c MAR: Lab columns imputed with GLOBAL median (target-blind).
+   5.4d MAR: Global median imputation applied to 59 remaining columns.
+   5.5  Winsorised 22 implausible values across 5 columns:
+   TC                                      below=6    above=0    bounds=[55.0, 600.0]
+   HDL_C                                   below=5    above=5    bounds=[10.0, 120.0]
+   LDL_C                                   below=1    above=0    bounds=[20.0, 700.0]
+   TG                                      below=1    above=0    bounds=[20.0, 2000.0]
+   WBC                                     below=0    above=4    bounds=[1.0, 50.0]
+   5.5b Recomputing composite indices from winsorised primaries …
+         Recomputed: nonHDL, TC_HDLratio
+         Recomputed: LDL_HDLratio
+         Recomputed: nonHDL_HDLratio
+         Recomputed: TG_HDLratio, AIP
+         Recomputed: TyG_index
+         Recomputed: TGhsCRPFBG_HDL
+   5.5b Composite recomputation complete.
+   5.6  Feature matrix: 1187 samples × 149 features.
+   5.6  NaN check passed (0 missing values in X).
+
+   ── Biomarker verification (post-imputation, post-winsorisation) ──
+   Feature               Type         Min        P5    Median       P95       Max  %imputed  Flag
+   ────────────────────────────────────────────────────────────────────────────────────────────────────
+   FBG                   mg/dL       56.00     77.00    114.00    241.70    625.00    0.8%  
+   TC                    mg/dL       55.00    110.00    163.00    250.00    486.00    2.8%   WARN:atLowerBound
+   TG                    mg/dL       20.00     64.00    140.00    273.70    766.00    1.9%   WARN:atLowerBound
+   HDL_C                 mg/dL       10.00     25.00     40.00     60.00    120.00    3.8%   WARN:atLowerBound WARN:atUpperBound
+   LDL_C                 mg/dL       20.00     49.00     94.00    161.00    490.00    0.8%   WARN:atLowerBound
+   hs_CRP                mg/L         0.28      0.87      4.87     15.92     75.11    0.1%  
+   WBC                   ×10³/μL      1.90      4.50      7.00     11.37     50.00   17.3%   WARN:>10%@median WARN:atUpperBound
+   BMI                   kg/m²       15.40     19.58     26.81     35.10     74.07    0.2%  
+   Systolic_Blood_Pressure  mmHg        80.00    100.00    130.00    180.00    200.00   11.9%   WARN:>10%@median
+   Diastolic_Blood_Pressure  mmHg        50.00     60.00     80.00    100.00    130.00   20.1%   WARN:>10%@median
+   Hb                    g/dL         7.10     10.60     13.30     16.17     21.90   17.8%   WARN:>10%@median
+   PLT                   ×10³/μL     11.20     12.50    162.00    248.00    469.00   71.2%   WARN:>10%@median
+
+   5.7  Z-score statistics computed. Constant features: 8
+   5.8  Dropped 8 constant features:
+        Tobacco_Used_by_Pipe, Alcoholic_Drinking, Alcoholic_Type, Alcoholic_Drinking_Dosage, Alcoholic_Drinking_Habit, How_Many_Time_per, Able_to_Walk, Depression_Type
+   5.8  Feature matrix after constant removal: 1187 × 141
+
+   ℹ  PLT NOTE (FIX-9 resolved): PLT imputation rate = 71.2% (median = 162.0).
+      Retention is JUSTIFIED: AUC = 0.759, rank 1/26 in FEAT_MINIMAL.
+      Manuscript must report PLT sensitivity analysis (see §3 comment).
+
+
+   ── Target distribution (N = 1187) ──
+   Class 0  [█████████████████] : n =  406  (34.2%)
+   Class 1  [█████████████████████████████████] : n =  781  (65.8%)
+   Imbalance ratio : 1.92
+
+================================================================================
+         CARDIOPREDICT PIPELINE: DATASET & FEATURE AUDIT SUMMARY
+================================================================================
+[Analytic Cohort Profile]
+  - Raw Registry Size      : 2346 registrants
+  - Excluded (Missing Target) : 1159 (49.4%)
+  - Excluded (Duplicates)    : 0 (0.0%)
+  - Final Analytic Sample   : 1187 (50.6%)
+    - Healthy (Control)    : 406 (34.2%)
+    - CAD (Case)           : 781 (65.8%)
+    - Imbalance Ratio      : 1.92
+
+[Feature Taxonomy Breakdown (223 Raw Columns)]
+  - Identifier Columns     : 2  ['ID', 'Computer_Code'] (dropped)
+  - Free-Text Columns      : 3  ['Describe_Type_of_Changing_in_Diet', 'Anxiety_Desc', 'Giving_up_Reason'] (dropped)
+  - Target Column          : 1  ['Group2_AngioStatus'] (extracted)
+  - Angiography/Vessel Leakage: 37 (dropped)
+  - Outcome/Clinical Leakage  : 32 (dropped)
+  - Constant/Dropped Features : 7 (dropped)
+  - Final Predictor Features  : 141 (retained in feature matrix X)
+    - Binary / Categorical : 67
+    - Continuous / Numeric : 74
+
+[Missingness & Imputation Profile]
+  - Columns with 0% missing   : 87 columns
+  - Columns with 1-5% missing : 15 columns
+  - Columns with 5-20% missing: 14 columns
+  - Columns with >20% missing : 107 columns
+  - Imputation rules applied:
+    - Smoking detail MNAR    : 5 columns (imputed with structural 0)
+    - Alcohol detail MNAR    : 4 columns (imputed with structural 0)
+    - Lab measurements MAR   : 14 columns (imputed with global median)
+    - Other numeric MAR      : 59 columns (imputed with global median)
+
+[Winsorization Clamping Summary]
+  - Winsorised extreme vals: 22 values across 5 columns
+    TC                                      below=6    above=0    bounds=[55.0, 600.0]
+    HDL_C                                   below=5    above=5    bounds=[10.0, 120.0]
+    LDL_C                                   below=1    above=0    bounds=[20.0, 700.0]
+    TG                                      below=1    above=0    bounds=[20.0, 2000.0]
+    WBC                                     below=0    above=4    bounds=[1.0, 50.0]
+================================================================================
+              FINAL RETAINED FEATURE MATRIX: 1187 × 141
+================================================================================
+      Age                              | Any_Change_in_Last_Year_Activity_Level | LDL_C                            | CVD_FH                          
+      JobLast                          | For_How_Long_Activity_Changed    | hs_CRP                           | HTN_FH                          
+      AgeGroup1                        | How_Many_Hours_Staying_in_Bed_in_Working_Day | WBC                              | kidneay_FH                      
+      Gender                           | How_Many_Hours_Staying_in_Bed_in_non_Working_Day | RBC                              | BMI_normal_yes_no               
+      Marriage_Status                  | PAL                              | Hct                              | anxiety_minimal_or_more_severe  
+      Education_Level                  | physical_Activity_Cat            | Hb                               | depression_yes_no               
+      Family_Income                    | Activity                         | MCV                              | cat_cigar_count                 
+      Family_IncomeCategory4           | Father_Diabetic_History          | MCH                              | TyG_index                       
+      Family_Income_Category5          | Mother_Diabetic_History          | MCHC                             | TC_HDLratio                     
+      History_of_Smoking               | Brothers_Diabetic_History        | PLT                              | LDL_HDLratio                    
+      Current_Cigarette_Smoking        | Sisters_Diabetic_History         | Weight                           | nonHDL                          
+      Smoke_Cat                        | Father_CVD_History               | Height                           | nonHDL_HDLratio                 
+      Tobacco_Use_by_Pipe              | Mother_CVD_History               | BMI                              | LipoproteinCombineIndex         
+      Tobacco_Use_by_Cigarette         | Brothers_CVD_History             | BMI_Category1                    | TG_HDLratio                     
+      Tobacco_Use_by_Waterpipe         | Sisters_CVD_History              | BMI_Category2                    | AIP                             
+      Use_Drugs                        | Father_Hypertension_History      | Waist_Circumference              | TGdarnon_HDL                    
+      Cigarette_Count_Smoking          | Mother_Hypertension_History      | Hip_Circumference                | LnTGdarnon_HDL                  
+      How_Long_Smoking                 | Brothers_Hypertension_History    | WHR                              | TGdarnon_HDL_HDLratio           
+      Tobacco_Used_by_Cigarette        | Sisters_Hypertension_History     | Systolic_Blood_Pressure          | LnTGdarnon_HDL_HDLratio         
+      Tobacco_Used_by_Waterpipe        | Father_Kidney_Disease_History    | SBP_Category                     | TGdarnonHDLdarhsCRP_HDLratio    
+      Used_Drugs                       | Mother_Kidney_Disease_History    | DBP_Category                     | LnTGdarnonHDLdarhsCRP_HDLratio  
+      Cigarette_Count_Smoked           | Brothers_Kidney_Disease_History  | HTN                              | TGdarnonHDLdarhsCRPdarFBG_HDLratio
+      How_Long_Smoked                  | Sisters_Kidney_Disease_History   | Mean_Pressure                    | TGdarhsCRPdarFBG_HDLratio       
+      How_Long_Ago_Giving_up           | Personal_Helth_Status            | Diastolic_Blood_Pressure         | LnTGdarhsCRPdarFBG_HDLratio     
+      Very_Active_at_Work              | Personal_Hypertension_History    | Demispan                         | TGdarhsCRPdarFBGdarWBC_HDLratio 
+      Active_at_Work                   | Personal_Diabetic_History        | Mid_Upper_Arm_Circumference      | TGPAL                           
+      Inactive_at_Work                 | Personal_Hyperlipidemia_History  | Anxiety_Score                    | TGhsCRPFBG_HDL                  
+      Very_Active_out_of_Work          | Personal_CVD_History             | Anxiety_Ctegory                  | statin_consumption              
+      Active_out_of_Work               | Changing_in_Diet_due_to_Diseases | Depression_Score                 | WBCdarHSCRP_PLT                 
+      Inactive_out_of_Work             | Personal_MI_History              | Depression_Catgory               | Hb_PLT                          
+      How_Many_Hours_Study_in_Bed      | Losing_Weight_in_Last_Three_Month | Depression_Result1               | HSCRP_PLT                       
+      How_Many_Hours_Daily_Nap         | FBG                              | Depression_Result2               | HSCRP_WBC                       
+      How_Many_Hours_Nightly_Sleep     | FBGCategory                      | Medicine_Category                | HSCRP_HB                        
+      Have_Dyspnea_in_out_Door_Working | TC                               | Diabetes                        
+      How_Many_Times_Dyspnea_in_out_Door_Working | TG                               | HTN2                            
+      How_Many_Times_Dyspnea_in_non_Working_Activity | HDL_C                            | DM_FH                           
+================================================================================
+
+   Feature                         Unit      Healthy (M±SD)        CAD (M±SD)            p(MWU)
+   ────────────────────────────────────────────────────────────────────────────────────────
+   Age                             years        53.69 ±    11.43     58.89 ±    10.59  ***
+   BMI                             kg/m²        26.89 ±     5.15     27.12 ±     5.20  ns
+   Waist_Circumference             cm           93.65 ±    12.77     94.36 ±    12.46  ns
+   Systolic_Blood_Pressure         mmHg        129.75 ±    23.73    134.51 ±    25.00  **
+   Diastolic_Blood_Pressure        mmHg         79.94 ±    11.97     81.94 ±    11.16  **
+   FBG                             mg/dL       115.74 ±    46.77    133.14 ±    62.62  ***
+   TC                              mg/dL       168.19 ±    43.66    169.10 ±    42.86  ns
+   TG                              mg/dL       138.11 ±    71.26    150.01 ±    73.43  ***
+   HDL_C                           mg/dL        42.48 ±    11.60     40.77 ±    12.08  ***
+   LDL_C                           mg/dL        97.70 ±    35.20     98.23 ±    34.54  ns
+   hs_CRP                          mg/L          5.34 ±     6.62      6.92 ±     8.83  ***
+   WBC                             ×10³/μL       7.02 ±     2.30      7.74 ±     3.84  ***
+   Hb                              g/dL         13.03 ±     1.61     13.44 ±     1.69  ***
+   PLT                             ×10³/μL     155.51 ±    68.08    154.57 ±    59.06  ns
+
+   3. Top 30 features by univariate AUC (from all retained features):
+      Rank  Feature                                 AUC     CAD mean    Healthy mean
+      1     Diabetes                                0.648       0.456       0.160
+      2     Gender                                  0.647       0.385       0.680
+      3     TGhsCRPFBG_HDL                          0.637    3597.450    2261.269
+      4     TGdarhsCRPdarFBG_HDLratio               0.637    3598.580    2261.391
+      5     LnTGdarhsCRPdarFBG_HDLratio             0.637       7.571       7.097
+      6     TGdarnonHDLdarhsCRPdarFBG_HDLratio      0.634  496374.629  312751.548
+      7     Age                                     0.632      58.894      53.690
+      8     TGPAL                                   0.623   20632.529   11715.363
+      9     TGdarhsCRPdarFBGdarWBC_HDLratio         0.621   28578.984   16388.275
+      10    LnTGdarnonHDLdarhsCRP_HDLratio          0.616       7.569       7.183
+      11    TGdarnonHDLdarhsCRP_HDLratio            0.615    3585.306    2456.863
+      12    hs_CRP                                  0.613       6.922       5.337
+      13    JobLast                                 0.612       3.481       4.291
+      14    TyG_index                               0.610       9.034       8.831
+      15    AgeGroup1                               0.603       2.440       2.200
+      16    FBGCategory                             0.601       2.013       1.648
+      17    FBG                                     0.600     133.141     115.744
+      18    TG_HDLratio                             0.595       3.942       3.549
+      19    AIP                                     0.595       0.541       0.484
+      20    LnTGdarnon_HDL_HDLratio                 0.593       6.058       5.899
+      21    TGdarnon_HDL_HDLratio                   0.592     527.014     475.098
+      22    TC_HDLratio                             0.586       4.314       4.151
+      23    nonHDL_HDLratio                         0.586       3.314       3.151
+      24    HSCRP_HB                                0.586       0.514       0.403
+      25    TG                                      0.585     150.009     138.113
+      26    Medicine_Category                       0.583       1.876       1.446
+      27    LipoproteinCombineIndex                 0.580   71361.665   66662.977
+      28    Hb                                      0.579      13.445      13.034
+      29    LnTGdarnon_HDL                          0.579       9.724       9.610
+      30    TGdarnon_HDL                            0.578   20491.657   18722.706
+
+[6/7] Generating figures …
+   Saved Fig1: Class Distribution
+   Saved Fig2: Missingness Profile
+   Saved Fig3: Biomarker Violin Plots
+   Fig4: FDR threshold p ≤ 0.01614  (27 significant pairs)
+   Saved Fig4: Spearman Correlation Matrix
+
+[7/7] Saving outputs …
+   Saved feature_subsets.mat    (minimal: 26, extended: 36 features)
+   Saved preprocessed_features.csv  +  _minimal.csv
+   Saved preprocessing_summary.txt
+   Writing column audit report …
+   Saved column_audit_report.txt  (223 columns)
+  Outputs  → /home/abolfazl/PycharmProjects/PythonProject5/angio_updated/cardiopredict/load_data/preprocessing_outputs/
+  Figures  → /home/abolfazl/PycharmProjects/PythonProject5/angio_updated/cardiopredict/load_data/preprocessing_outputs/figures/
+  Ready for Step 2 (prediction).
+    N=1187  P=33  CAD=65.8%
+  N=1187  P=33  CAD=65.8%  (missing cells re-introduced for fold-internal imputation: 2633)
+[3a] Tuning LightGBM (150 trials, age-stratified CV)...
+Best trial: 118. Best value: 0.868708: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 150/150 [03:36<00:00,  1.44s/it]
+      best CV AUC = 0.8687
+[3b] Tuning CatBoost (75 trials, age-stratified CV)...
+Best trial: 67. Best value: 0.865498: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 75/75 [06:57<00:00,  5.57s/it]
+      best CV AUC = 0.8655
+
+[CV] repeated nested cross-validation (2x5-fold) ...
+    rep 1/1  fold 1/5  (42.2s)
+    rep 1/1  fold 2/5  (40.7s)
+    rep 1/1  fold 3/5  (40.4s)
+    rep 1/1  fold 4/5  (38.4s)
+    rep 1/1  fold 5/5  (39.1s)
+[5] Training final base learners on full train set...
+    CV rep 1/2 fold 1/5 (254.4s)
+    rep 1/1  fold 1/5  (39.3s)
+    rep 1/1  fold 2/5  (38.6s)
+    rep 1/1  fold 3/5  (40.2s)
+    rep 1/1  fold 4/5  (39.1s)
+    rep 1/1  fold 5/5  (39.2s)
+[5] Training final base learners on full train set...
+    CV rep 1/2 fold 2/5 (249.4s)
+    rep 1/1  fold 1/5  (38.2s)
+    rep 1/1  fold 2/5  (37.2s)
+    rep 1/1  fold 3/5  (37.7s)
+    rep 1/1  fold 4/5  (38.1s)
+    rep 1/1  fold 5/5  (37.1s)
+[5] Training final base learners on full train set...
+    CV rep 1/2 fold 3/5 (238.8s)
+    rep 1/1  fold 1/5  (37.0s)
+    rep 1/1  fold 2/5  (36.5s)
+    rep 1/1  fold 3/5  (36.9s)
+    rep 1/1  fold 4/5  (36.5s)
+    rep 1/1  fold 5/5  (36.5s)
+[5] Training final base learners on full train set...
+    CV rep 1/2 fold 4/5 (234.4s)
+    rep 1/1  fold 1/5  (36.0s)
+    rep 1/1  fold 2/5  (37.1s)
+    rep 1/1  fold 3/5  (36.9s)
+    rep 1/1  fold 4/5  (36.2s)
+    rep 1/1  fold 5/5  (35.2s)
+[5] Training final base learners on full train set...
+    CV rep 1/2 fold 5/5 (231.4s)
+    rep 1/1  fold 1/5  (37.4s)
+    rep 1/1  fold 2/5  (37.0s)
+    rep 1/1  fold 3/5  (36.8s)
+    rep 1/1  fold 4/5  (36.2s)
+    rep 1/1  fold 5/5  (37.2s)
+[5] Training final base learners on full train set...
+    CV rep 2/2 fold 1/5 (234.8s)
+    rep 1/1  fold 1/5  (37.6s)
+    rep 1/1  fold 2/5  (36.5s)
+    rep 1/1  fold 3/5  (37.3s)
+    rep 1/1  fold 4/5  (36.7s)
+    rep 1/1  fold 5/5  (36.4s)
+[5] Training final base learners on full train set...
+    CV rep 2/2 fold 2/5 (234.6s)
+    rep 1/1  fold 1/5  (36.1s)
+    rep 1/1  fold 2/5  (36.1s)
+    rep 1/1  fold 3/5  (37.1s)
+    rep 1/1  fold 4/5  (36.9s)
+    rep 1/1  fold 5/5  (37.1s)
+[5] Training final base learners on full train set...
+    CV rep 2/2 fold 3/5 (233.4s)
+    rep 1/1  fold 1/5  (35.3s)
+    rep 1/1  fold 2/5  (37.8s)
+    rep 1/1  fold 3/5  (36.5s)
+    rep 1/1  fold 4/5  (36.5s)
+    rep 1/1  fold 5/5  (36.1s)
+[5] Training final base learners on full train set...
+    CV rep 2/2 fold 4/5 (232.0s)
+    rep 1/1  fold 1/5  (37.8s)
+    rep 1/1  fold 2/5  (36.7s)
+    rep 1/1  fold 3/5  (36.4s)
+    rep 1/1  fold 4/5  (36.9s)
+    rep 1/1  fold 5/5  (37.6s)
+[5] Training final base learners on full train set...
+    CV rep 2/2 fold 5/5 (235.6s)
+[CV] AUC per repeat: [0.859, 0.8658]
+[CV] AUC = 0.8624 +/- 0.0034
+
+[final] training deployed model on all 1187 patients ...
+[final] building full-data OOF for meta/calibration/threshold/conformal ...
+    rep 1/10  fold 1/5  (47.7s)
+    rep 1/10  fold 2/5  (48.4s)
+    rep 1/10  fold 3/5  (50.9s)
+    rep 1/10  fold 4/5  (48.4s)
+    rep 1/10  fold 5/5  (49.6s)
+    rep 2/10  fold 1/5  (48.5s)
+    rep 2/10  fold 2/5  (48.9s)
+    rep 2/10  fold 3/5  (50.2s)
+    rep 2/10  fold 4/5  (49.9s)
+    rep 2/10  fold 5/5  (50.0s)
+    rep 3/10  fold 1/5  (50.5s)
+    rep 3/10  fold 2/5  (50.0s)
+    rep 3/10  fold 3/5  (52.6s)
+    rep 3/10  fold 4/5  (50.1s)
+    rep 3/10  fold 5/5  (51.0s)
+    rep 4/10  fold 1/5  (53.4s)
+    rep 4/10  fold 2/5  (51.8s)
+    rep 4/10  fold 3/5  (50.8s)
+    rep 4/10  fold 4/5  (50.9s)
+    rep 4/10  fold 5/5  (49.9s)
+    rep 5/10  fold 1/5  (49.7s)
+    rep 5/10  fold 2/5  (53.8s)
+    rep 5/10  fold 3/5  (52.2s)
+    rep 5/10  fold 4/5  (51.1s)
+    rep 5/10  fold 5/5  (51.7s)
+    rep 6/10  fold 1/5  (52.2s)
+    rep 6/10  fold 2/5  (53.4s)
+    rep 6/10  fold 3/5  (52.0s)
+    rep 6/10  fold 4/5  (52.1s)
+    rep 6/10  fold 5/5  (51.0s)
+    rep 7/10  fold 1/5  (51.5s)
+    rep 7/10  fold 2/5  (52.8s)
+    rep 7/10  fold 3/5  (53.6s)
+    rep 7/10  fold 4/5  (52.1s)
+    rep 7/10  fold 5/5  (51.9s)
+    rep 8/10  fold 1/5  (51.3s)
+    rep 8/10  fold 2/5  (51.4s)
+    rep 8/10  fold 3/5  (51.3s)
+    rep 8/10  fold 4/5  (52.9s)
+    rep 8/10  fold 5/5  (52.3s)
+    rep 9/10  fold 1/5  (51.7s)
+    rep 9/10  fold 2/5  (51.9s)
+    rep 9/10  fold 3/5  (53.0s)
+    rep 9/10  fold 4/5  (51.3s)
+    rep 9/10  fold 5/5  (52.0s)
+    rep 10/10  fold 1/5  (52.4s)
+    rep 10/10  fold 2/5  (52.3s)
+    rep 10/10  fold 3/5  (50.5s)
+    rep 10/10  fold 4/5  (50.5s)
+    rep 10/10  fold 5/5  (50.4s)
+[final] fitting + persisting deployed base learners on 100% data ...
+
+[report] HONEST cross-validated metrics @ deployed threshold 0.5400:
+    auc         : 0.8624
+    sensitivity : 0.8707
+    specificity : 0.6650
+    ppv         : 0.8333
+    npv         : 0.7278
+    accuracy    : 0.8003
+    mcc         : 0.5483
+    calibration slope=0.869 intercept=-0.056 E/O=1.019
+[save] predictions.npz + 3 figures -> /home/abolfazl/PycharmProjects/PythonProject5/angio_updated/outputs/figures
+
+[save] v17 deterministic bundle -> /home/abolfazl/PycharmProjects/PythonProject5/angio_updated/outputs/model_bundle.joblib  (49.0 MB)
+[save] report -> /home/abolfazl/PycharmProjects/PythonProject5/angio_updated/outputs/train_prod_report.json

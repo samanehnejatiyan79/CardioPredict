@@ -1,0 +1,108 @@
+{
+  "provenance": {
+    "version": "v17",
+    "trained_at": "2026-06-16T14:59:09",
+    "data_path": "/home/abolfazl/PycharmProjects/PythonProject5/angio_updated/cardiopredict/load_data/Tajfard Angio CAD & Healthy 8 (New) (2346 Samples) - Edit on 23.2.2014 .csv",
+    "data_sha256_16": "fb3af1d8645920f3",
+    "n_samples": 1187,
+    "feature_list": [
+      "Age",
+      "Gender",
+      "BMI",
+      "Waist_Circumference",
+      "WHR",
+      "Systolic_Blood_Pressure",
+      "Diastolic_Blood_Pressure",
+      "HTN2",
+      "FBG",
+      "Diabetes",
+      "TyG_index",
+      "TC",
+      "TG",
+      "HDL_C",
+      "LDL_C",
+      "nonHDL",
+      "TC_HDLratio",
+      "AIP",
+      "hs_CRP",
+      "WBC",
+      "TGhsCRPFBG_HDL",
+      "Hb",
+      "History_of_Smoking",
+      "statin_consumption",
+      "Personal_MI_History",
+      "Personal_Hypertension_History",
+      "DM_FH",
+      "CVD_FH",
+      "HTN_FH",
+      "PAL"
+    ],
+    "random_state": 42,
+    "use_tabpfn": true,
+    "git_commit": "n/a",
+    "python": "3.12.3",
+    "libs": {
+      "numpy": "1.26.4",
+      "sklearn": "1.8.0",
+      "lightgbm": "4.6.0",
+      "catboost": "1.2.10",
+      "tabpfn": "7.1.1"
+    }
+  },
+  "cv_metrics": {
+    "auc": 0.8657974492724372,
+    "auc_sd": 0.001361617983764718,
+    "sensitivity": 0.7400768245838668,
+    "specificity": 0.8152709359605911,
+    "ppv": 0.885145482388974,
+    "npv": 0.6198501872659176,
+    "accuracy": 0.7657961246840775,
+    "mcc": 0.5295736154941001,
+    "n": 1187,
+    "calibration": {
+      "slope": 0.9049841146384935,
+      "intercept": -0.04947142608099897,
+      "EO_ratio": 1.0167865418124795,
+      "CITL": -0.04947142608099897
+    },
+    "auc_per_repeat": [
+      0.8644,
+      0.8672
+    ]
+  },
+  "thresholds": {
+    "global_mcc": 0.7267645399067559,
+    "global_youden": 0.7267645399067559,
+    "age_lt65_mcc": 0.49459574804594203,
+    "age_ge65_sens_targeted": 0.7269669000485696,
+    "cost_sensitive": 0.18376602324208874
+  },
+  "conformal_q_hat": 0.6775961370539361,
+  "lgb_params": {
+    "n_estimators": 783,
+    "num_leaves": 71,
+    "max_depth": 7,
+    "learning_rate": 0.00585032711526593,
+    "min_child_samples": 33,
+    "subsample": 0.8136472880789833,
+    "colsample_bytree": 0.5975348536769132,
+    "reg_alpha": 0.10977610182236741,
+    "reg_lambda": 0.38295952491738755,
+    "random_state": 42,
+    "verbosity": -1,
+    "objective": "binary"
+  },
+  "cb_params": {
+    "iterations": 562,
+    "learning_rate": 0.009348102486874814,
+    "depth": 5,
+    "l2_leaf_reg": 1.6699284623632553,
+    "border_count": 85,
+    "random_strength": 0.7083647397544213,
+    "bagging_temperature": 0.5432879038400501,
+    "verbose": false,
+    "random_seed": 42,
+    "eval_metric": "AUC",
+    "loss_function": "Logloss"
+  }
+}
